@@ -1,7 +1,7 @@
 include .envrc
 
 MIGRATIONS_PATH = ./cmd/migrate/migrations
-DB_MIGRATOR_ADDR ?= postgres://admin:adminpassword@localhost/hmsDB?sslmode=disable
+DB_ADDR ?= postgres://admin:adminpassword@localhost/hmsDB?sslmode=disable
 
 .PHONY: migrate-create
 migration:
@@ -9,13 +9,16 @@ migration:
 
 .PHONY: migrate-up
 migrate-up:
-	@migrate -path=$(MIGRATIONS_PATH) -database=$(DB_MIGRATOR_ADDR) up
+	@migrate -path=$(MIGRATIONS_PATH) -database=$(DB_ADDR) up
 
 .PHONY: migrate-down
 migrate-down:
-	@migrate -path=$(MIGRATIONS_PATH) -database=$(DB_MIGRATOR_ADDR) down $(filter-out $@,$(MAKECMDGOALS))
+	@migrate -path=$(MIGRATIONS_PATH) -database=$(DB_ADDR) down $(filter-out $@,$(MAKECMDGOALS))
 
 .PHONY: seed
-seed:
+seed: 
 	@go run cmd/migrate/seed/main.go
 
+.PHONY: gen-docs
+gen-docs:
+	@swag init -g ./api/main.go -d cmd,internal && swag fmt
