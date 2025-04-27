@@ -729,7 +729,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "is_active": {
                     "type": "boolean"
@@ -805,7 +805,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/store.User"
                 },
                 "user_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "version": {
                     "type": "integer"
@@ -849,7 +849,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/store.User"
                 },
                 "user_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "version": {
                     "type": "integer"
@@ -883,7 +883,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "is_active": {
                     "type": "boolean"

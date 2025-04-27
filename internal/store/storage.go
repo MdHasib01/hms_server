@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"errors"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 var (
@@ -19,26 +21,26 @@ type Storage struct {
 		Create(context.Context, *Post) error
 		Delete(context.Context, int64) error
 		Update(context.Context, *Post) error
-		GetUserFeed(context.Context, int64, PaginatedFeedQuery) ([]PostWithMetadata, error)
+		GetUserFeed(context.Context, uuid.UUID, PaginatedFeedQuery) ([]PostWithMetadata, error)
 	}
 	Doctors interface {
-		GetByID(context.Context, int64) (*Doctor, error)
+		GetByID(context.Context, uuid.UUID) (*Doctor, error)
 	}
 	Users interface {
-		GetByID(context.Context, int64) (*User, error)
+		GetByID(context.Context, uuid.UUID) (*User, error)
 		GetByEmail(context.Context, string) (*User, error)
 		Create(context.Context, *sql.Tx, *User) error
 		CreateAndInvite(ctx context.Context, user *User, token string, exp time.Duration) error
 		Activate(context.Context, string) error
-		Delete(context.Context, int64) error
+		Delete(context.Context, uuid.UUID) error
 	}
 	Comments interface {
 		Create(context.Context, *Comment) error
 		GetByPostID(context.Context, int64) ([]Comment, error)
 	}
 	Followers interface {
-		Follow(ctx context.Context, followerID, userID int64) error
-		Unfollow(ctx context.Context, followerID, userID int64) error
+		Follow(ctx context.Context, followerID, userID uuid.UUID) error
+		Unfollow(ctx context.Context, followerID, userID uuid.UUID) error
 	}
 	Roles interface {
 		GetByName(context.Context, string) (*Role, error)

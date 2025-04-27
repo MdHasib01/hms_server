@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"net/http"
-	"strconv"
 
 	"github.com/MdHasib01/hms_server/internal/store"
 	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
 )
 
 type userKey string
@@ -51,7 +51,7 @@ func (app *application) getUserHandler(w http.ResponseWriter, r *http.Request) {
 func (app *application) followUserHandler(w http.ResponseWriter, r *http.Request) {
 	followerUser := getUserFromContext(r)
 
-	followedID, err := strconv.ParseInt(chi.URLParam(r, "userID"), 10, 64)
+	followedID, err := uuid.Parse(chi.URLParam(r, "userID"))
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
@@ -91,7 +91,7 @@ func (app *application) followUserHandler(w http.ResponseWriter, r *http.Request
 func (app *application) unfollowUserHandler(w http.ResponseWriter, r *http.Request) {
 	followerUser := getUserFromContext(r)
 
-	unfollowedID, err := strconv.ParseInt(chi.URLParam(r, "userID"), 10, 64)
+	unfollowedID, err := uuid.Parse(chi.URLParam(r, "userID"))
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
@@ -141,7 +141,7 @@ func (app *application) activateUserHandler(w http.ResponseWriter, r *http.Reque
 
 func (app *application) userContextMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		userID, err := strconv.ParseInt(chi.URLParam(r, "userID"), 10, 64)
+		userID, err := uuid.Parse(chi.URLParam(r, "userID"))
 		if err != nil {
 			app.badRequestResponse(w, r, err)
 			return

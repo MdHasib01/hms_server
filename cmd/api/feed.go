@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/MdHasib01/hms_server/internal/store"
+	"github.com/google/uuid"
 )
 
 // getUserFeedHandler godoc
@@ -48,7 +49,13 @@ func (app *application) getUserFeedHandler(w http.ResponseWriter, r *http.Reques
 
 	ctx := r.Context()
 
-	feed, err := app.store.Posts.GetUserFeed(ctx, int64(341), fq)
+	userID, err := uuid.Parse("341")
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	feed, err := app.store.Posts.GetUserFeed(ctx, userID, fq)
 	if err != nil {
 		app.internalServerError(w, r, err)
 		return

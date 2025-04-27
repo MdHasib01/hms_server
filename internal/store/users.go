@@ -8,6 +8,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -17,14 +18,14 @@ var (
 )
 
 type User struct {
-	ID        int64    `json:"id"`
-	Username  string   `json:"username"`
-	Email     string   `json:"email"`
-	Password  password `json:"-"`
-	CreatedAt string   `json:"created_at"`
-	IsActive  bool     `json:"is_active"`
-	RoleID    int64    `json:"role_id"`
-	Role      Role     `json:"role"`
+	ID        uuid.UUID `json:"id"`
+	Username  string    `json:"username"`
+	Email     string    `json:"email"`
+	Password  password  `json:"-"`
+	CreatedAt string    `json:"created_at"`
+	IsActive  bool      `json:"is_active"`
+	RoleID    int64     `json:"role_id"`
+	Role      Role      `json:"role"`
 }
 
 type password struct {
@@ -80,7 +81,7 @@ func (s *UserStore) Create(ctx context.Context, tx *sql.Tx, user *User) error {
 	return nil
 }
 
-func (s *UserStore) GetByID(ctx context.Context, userID int64) (*User, error) {
+func (s *UserStore) GetByID(ctx context.Context, userID uuid.UUID) (*User, error) {
 	query := `
 		SELECT users.id, username, email, password, created_at, roles.*
 		FROM users
@@ -190,7 +191,7 @@ func (s *UserStore) getUserFromInvitation(ctx context.Context, tx *sql.Tx, token
 	return user, nil
 }
 
-func (s *UserStore) createUserInvitation(ctx context.Context, tx *sql.Tx, token string, exp time.Duration, userID int64) error {
+func (s *UserStore) createUserInvitation(ctx context.Context, tx *sql.Tx, token string, exp time.Duration, userID uuid.UUID) error {
 	query := `INSERT INTO user_invitations (token, user_id, expiry) VALUES ($1, $2, $3)`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
@@ -218,7 +219,7 @@ func (s *UserStore) update(ctx context.Context, tx *sql.Tx, user *User) error {
 	return nil
 }
 
-func (s *UserStore) deleteUserInvitations(ctx context.Context, tx *sql.Tx, userID int64) error {
+func (s *UserStore) deleteUserInvitations(ctx context.Context, tx *sql.Tx, userID uuid.UUID) error {
 	query := `DELETE FROM user_invitations WHERE user_id = $1`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
@@ -232,7 +233,7 @@ func (s *UserStore) deleteUserInvitations(ctx context.Context, tx *sql.Tx, userI
 	return nil
 }
 
-func (s *UserStore) Delete(ctx context.Context, userID int64) error {
+func (s *UserStore) Delete(ctx context.Context, userID uuid.UUID) error {
 	return withTx(s.db, ctx, func(tx *sql.Tx) error {
 		if err := s.delete(ctx, tx, userID); err != nil {
 			return err
@@ -246,7 +247,7 @@ func (s *UserStore) Delete(ctx context.Context, userID int64) error {
 	})
 }
 
-func (s *UserStore) delete(ctx context.Context, tx *sql.Tx, id int64) error {
+func (s *UserStore) delete(ctx context.Context, tx *sql.Tx, id uuid.UUID) error {
 	query := `DELETE FROM users WHERE id = $1`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)

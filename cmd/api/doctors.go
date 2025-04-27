@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/MdHasib01/hms_server/internal/store"
 	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
 )
 
 type doctorKey string
@@ -40,7 +40,7 @@ func (app *application) doctorContextMiddleware(next http.Handler) http.Handler 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		idParam := chi.URLParam(r, "doctorID")
 		fmt.Print(idParam)
-		id, err := strconv.ParseInt(idParam, 10, 64)
+		id, err := uuid.Parse(idParam)
 		if err != nil {
 			app.internalServerError(w, r, err)
 			return

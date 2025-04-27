@@ -4,22 +4,24 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+
+	"github.com/google/uuid"
 )
 
 type Doctor struct {
-	UserID         int64  `json:"user_id"`
-	UserName       string `json:"username"`
-	Password       string `json:"-"`
-	Email          string `json:"email"`
-	Specialization string `json:"specialization"`
-	LicenseNumber  string `json:"license_number"`
+	UserID         uuid.UUID `json:"user_id"`
+	UserName       string    `json:"username"`
+	Password       string    `json:"-"`
+	Email          string    `json:"email"`
+	Specialization string    `json:"specialization"`
+	LicenseNumber  string    `json:"license_number"`
 }
 
 type DoctorStore struct {
 	db *sql.DB
 }
 
-func (s *DoctorStore) GetByID(ctx context.Context, id int64) (*Doctor, error) {
+func (s *DoctorStore) GetByID(ctx context.Context, id uuid.UUID) (*Doctor, error) {
 	query := `
        SELECT d.user_id, u.username, u.email, d.specialization, d.license_number
 FROM doctors d

@@ -62,7 +62,7 @@ definitions:
       email:
         type: string
       id:
-        type: integer
+        type: string
       is_active:
         type: boolean
       role:
@@ -112,7 +112,7 @@ definitions:
       user:
         $ref: '#/definitions/store.User'
       user_id:
-        type: integer
+        type: string
       version:
         type: integer
     type: object
@@ -141,7 +141,7 @@ definitions:
       user:
         $ref: '#/definitions/store.User'
       user_id:
-        type: integer
+        type: string
       version:
         type: integer
     type: object
@@ -163,7 +163,7 @@ definitions:
       email:
         type: string
       id:
-        type: integer
+        type: string
       is_active:
         type: boolean
       role:

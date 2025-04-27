@@ -5,11 +5,11 @@ import (
 	"encoding/base64"
 	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/MdHasib01/hms_server/internal/store"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 func (app *application) AuthTokenMiddleware(next http.Handler) http.Handler {
@@ -35,7 +35,7 @@ func (app *application) AuthTokenMiddleware(next http.Handler) http.Handler {
 
 		claims, _ := jwtToken.Claims.(jwt.MapClaims)
 
-		userID, err := strconv.ParseInt(fmt.Sprintf("%.f", claims["sub"]), 10, 64)
+		userID, err := uuid.Parse(fmt.Sprintf("%s", claims["sub"]))
 		if err != nil {
 			app.unauthorizedErrorResponse(w, r, err)
 			return
