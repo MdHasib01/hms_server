@@ -16,13 +16,6 @@ var (
 )
 
 type Storage struct {
-	Posts interface {
-		GetByID(context.Context, int64) (*Post, error)
-		Create(context.Context, *Post) error
-		Delete(context.Context, int64) error
-		Update(context.Context, *Post) error
-		GetUserFeed(context.Context, uuid.UUID, PaginatedFeedQuery) ([]PostWithMetadata, error)
-	}
 	Doctors interface {
 		GetByID(context.Context, uuid.UUID) (*Doctor, error)
 	}
@@ -34,14 +27,7 @@ type Storage struct {
 		Activate(context.Context, string) error
 		Delete(context.Context, uuid.UUID) error
 	}
-	Comments interface {
-		Create(context.Context, *Comment) error
-		GetByPostID(context.Context, int64) ([]Comment, error)
-	}
-	Followers interface {
-		Follow(ctx context.Context, followerID, userID uuid.UUID) error
-		Unfollow(ctx context.Context, followerID, userID uuid.UUID) error
-	}
+
 	Roles interface {
 		GetByName(context.Context, string) (*Role, error)
 	}
@@ -49,12 +35,9 @@ type Storage struct {
 
 func NewStorage(db *sql.DB) Storage {
 	return Storage{
-		Doctors:   &DoctorStore{db},
-		Posts:     &PostStore{db},
-		Users:     &UserStore{db},
-		Comments:  &CommentStore{db},
-		Followers: &FollowerStore{db},
-		Roles:     &RoleStore{db},
+		Doctors: &DoctorStore{db},
+		Users:   &UserStore{db},
+		Roles:   &RoleStore{db},
 	}
 }
 
