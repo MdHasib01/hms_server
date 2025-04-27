@@ -9,8 +9,8 @@ INSERT INTO
   roles (name, description, level)
 VALUES
   (
-    'user',
-    'A user can create posts and comments',
+    'patient',
+    'A patient can only make appointments',
     1
   );
 
@@ -18,8 +18,8 @@ INSERT INTO
   roles (name, description, level)
 VALUES
   (
-    'moderator',
-    'A moderator can update other users posts',
+    'doctor',
+    'A doctor can see the appointments of other patients',
     2
   );
 
@@ -27,7 +27,15 @@ INSERT INTO
   roles (name, description, level)
 VALUES
   (
+    'receptionist',
+    'A receptionist can see the appointments of all patients',
+    2
+  );
+INSERT INTO
+  roles (name, description, level)
+VALUES
+  (
     'admin',
-    'An admin can update and delete other users posts',
+    'An admin can see the appointments of all patients',
     3
   );

@@ -244,6 +244,35 @@ paths:
       summary: Registers a user
       tags:
       - authentication
+  /doctors/{doctorID}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches the doctor by id
+      parameters:
+      - description: Doctor ID
+        in: path
+        name: doctorID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Doctor Found
+          schema:
+            type: string
+        "400":
+          description: Doctor Id  missing
+          schema: {}
+        "404":
+          description: Dctor not found
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Fetches the doctor by id
+      tags:
+      - doctor
   /health:
     get:
       description: Healthcheck endpoint

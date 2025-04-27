@@ -23,8 +23,6 @@ type Storage struct {
 	}
 	Doctors interface {
 		GetByID(context.Context, int64) (*Doctor, error)
-		GetDoctorsByFilter(context.Context, DoctorFilter) ([]*Doctor, error)
-		GetDoctorsByAvailability(context.Context, string, string) ([]*Doctor, error)
 	}
 	Users interface {
 		GetByID(context.Context, int64) (*User, error)

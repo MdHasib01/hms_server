@@ -122,6 +122,17 @@ func (app *application) mount() http.Handler {
 			})
 		})
 
+		// Doctor routes
+		r.Route("/doctors", func(r chi.Router) {
+
+			r.Route("/{doctorID}", func(r chi.Router) {
+				r.Use(app.AuthTokenMiddleware)
+				r.Use(app.doctorContextMiddleware)
+				r.Get("/", app.GetByID)
+			})
+
+		})
+
 		// Public routes
 		r.Route("/authentication", func(r chi.Router) {
 			r.Post("/user", app.registerUserHandler)
