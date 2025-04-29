@@ -1,5 +1,41 @@
 basePath: /v1
 definitions:
+  main.CreateAvailabilityPayload:
+    properties:
+      available_day:
+        type: string
+      doctor_id:
+        type: string
+      ends_at:
+        type: string
+      starts_from:
+        type: string
+    type: object
+  main.CreateDoctorPayload:
+    properties:
+      email:
+        maxLength: 255
+        type: string
+      license_number:
+        maxLength: 50
+        type: string
+      password:
+        maxLength: 72
+        minLength: 3
+        type: string
+      specialization:
+        maxLength: 100
+        type: string
+      username:
+        maxLength: 100
+        type: string
+    required:
+    - email
+    - license_number
+    - password
+    - specialization
+    - username
+    type: object
   main.CreateUserTokenPayload:
     properties:
       email:
@@ -45,6 +81,30 @@ definitions:
       role_id:
         type: integer
       token:
+        type: string
+      username:
+        type: string
+    type: object
+  store.Availability:
+    properties:
+      available_day:
+        type: string
+      doctor_id:
+        type: string
+      ends_at:
+        type: string
+      starts_from:
+        type: string
+    type: object
+  store.Doctor:
+    properties:
+      email:
+        type: string
+      license_number:
+        type: string
+      specialization:
+        type: string
+      user_id:
         type: string
       username:
         type: string
@@ -148,6 +208,34 @@ paths:
       summary: Registers a user
       tags:
       - authentication
+  /doctors:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new doctor user and doctor profile
+      parameters:
+      - description: Doctor user and profile information
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateDoctorPayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/store.Doctor'
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a doctor account
+      tags:
+      - doctor
   /doctors/{doctorID}:
     get:
       consumes:
@@ -158,7 +246,7 @@ paths:
         in: path
         name: doctorID
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -175,6 +263,36 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Fetches the doctor by id
+      tags:
+      - doctor
+  /doctors/availability:
+    post:
+      consumes:
+      - application/json
+      description: Creates an availability entry for a doctor
+      parameters:
+      - description: Availability details
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateAvailabilityPayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/store.Availability'
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Creates a new availability entry
       tags:
       - doctor
   /health:

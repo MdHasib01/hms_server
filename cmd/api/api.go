@@ -9,7 +9,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"go.uber.org/zap"
 
-	"github.com/MdHasib01/hms_server/docs" // This is required to generate swagger docs
+	"github.com/MdHasib01/hms_server/docs"
 	"github.com/MdHasib01/hms_server/internal/auth"
 	"github.com/MdHasib01/hms_server/internal/mailer"
 	"github.com/MdHasib01/hms_server/internal/store"
@@ -108,11 +108,15 @@ func (app *application) mount() http.Handler {
 
 		// Doctor routes
 		r.Route("/doctors", func(r chi.Router) {
-
+			r.Post("/", app.CreateDoctorHandler)
 			r.Route("/{doctorID}", func(r chi.Router) {
 				r.Use(app.AuthTokenMiddleware)
 				r.Use(app.doctorContextMiddleware)
 				r.Get("/", app.GetByID)
+			})
+			r.Route("/availability", func(r chi.Router) {
+				r.Use(app.AuthTokenMiddleware)
+				r.Post("/", app.activateUserHandler)
 			})
 
 		})

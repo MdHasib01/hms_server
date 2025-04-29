@@ -18,6 +18,8 @@ var (
 type Storage struct {
 	Doctors interface {
 		GetByID(context.Context, uuid.UUID) (*Doctor, error)
+		Create(context.Context, *Doctor) error
+		Delete(context.Context, uuid.UUID) error
 	}
 	Users interface {
 		GetByID(context.Context, uuid.UUID) (*User, error)
@@ -26,8 +28,12 @@ type Storage struct {
 		CreateAndInvite(ctx context.Context, user *User, token string, exp time.Duration) error
 		Activate(context.Context, string) error
 		Delete(context.Context, uuid.UUID) error
+		CreateWithRole(context.Context, *User, int) error
 	}
 
+	Availability interface {
+		Create(context.Context, *Availability) error
+	}
 	Roles interface {
 		GetByName(context.Context, string) (*Role, error)
 	}

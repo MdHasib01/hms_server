@@ -8,6 +8,7 @@ import (
 	"github.com/MdHasib01/hms_server/internal/env"
 	"github.com/MdHasib01/hms_server/internal/mailer"
 	"github.com/MdHasib01/hms_server/internal/store"
+	_ "github.com/lib/pq"
 	"go.uber.org/zap"
 )
 

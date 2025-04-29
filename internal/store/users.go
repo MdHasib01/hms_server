@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -288,4 +289,36 @@ func (s *UserStore) GetByEmail(ctx context.Context, email string) (*User, error)
 	}
 
 	return user, nil
+}
+
+func (s *UserStore) CreateWithRole(ctx context.Context, user *User, roleID int) error {
+	query := `
+		INSERT INTO users (username, password, email, role_id) 
+		VALUES ($1, $2, $3, $4) 
+		RETURNING id, created_at
+	`
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	err := s.db.QueryRowContext(
+		ctx,
+		query,
+		user.Username,
+		user.Password.hash,
+		user.Email,
+		roleID,
+	).Scan(&user.ID, &user.CreatedAt)
+
+	if err != nil {
+		switch {
+		case strings.Contains(err.Error(), `users_email_key`):
+			return ErrDuplicateEmail
+		case strings.Contains(err.Error(), `users_username_key`):
+			return ErrDuplicateUsername
+		default:
+			return err
+		}
+	}
+
+	return nil
 }
