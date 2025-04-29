@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/MdHasib01/hms_server/internal/store"
@@ -41,25 +40,19 @@ func (app *application) CreateAvailablityHandler(w http.ResponseWriter, r *http.
 		app.badRequestResponse(w, r, err)
 		return
 	}
-
 	// 🛑 Step 2: Validate DoctorID is a real UUID
-	doctorUUID, err := uuid.Parse(payload.DoctorID)
-	if err != nil {
-		app.badRequestResponse(w, r, fmt.Errorf("invalid doctor_id format: %v", err))
-		return
-	}
 
 	ctx := r.Context()
 
 	// Step 3: Create Availability entry
 	availability := &store.Availability{
-		DoctorID:     doctorUUID,
+		DoctorID:     payload.DoctorID,
 		AvailableDay: payload.AvailableDay,
 		StartsFrom:   payload.StartsFrom,
 		EndsAt:       payload.EndsAt,
 	}
 
-	err = app.store.Availability.Create(ctx, availability)
+	err := app.store.Availability.Create(ctx, availability)
 	if err != nil {
 		app.internalServerError(w, r, err)
 		return

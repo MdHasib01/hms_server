@@ -13,27 +13,66 @@ definitions:
     type: object
   main.CreateDoctorPayload:
     properties:
+      address:
+        type: string
+      age:
+        type: string
+      blood_group:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+      designation:
+        type: string
       email:
         maxLength: 255
         type: string
+      firstname:
+        maxLength: 100
+        type: string
+      gender:
+        type: string
+      lastname:
+        maxLength: 100
+        type: string
       license_number:
-        maxLength: 50
+        type: string
+      marital_status:
         type: string
       password:
         maxLength: 72
         minLength: 3
         type: string
+      postal_code:
+        type: string
+      qualification:
+        type: string
       specialization:
-        maxLength: 100
+        type: string
+      state:
         type: string
       username:
         maxLength: 100
         type: string
     required:
+    - address
+    - age
+    - blood_group
+    - city
+    - country
+    - designation
     - email
+    - firstname
+    - gender
+    - lastname
     - license_number
+    - marital_status
     - password
+    - postal_code
+    - qualification
     - specialization
+    - state
     - username
     type: object
   main.CreateUserTokenPayload:
@@ -98,11 +137,41 @@ definitions:
     type: object
   store.Doctor:
     properties:
+      address:
+        type: string
+      age:
+        type: string
+      availability:
+        items:
+          type: string
+        type: array
+      blood_group:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+      designation:
+        type: string
       email:
+        type: string
+      firstname:
+        type: string
+      gender:
+        type: string
+      lastname:
         type: string
       license_number:
         type: string
+      marital_status:
+        type: string
+      postal_code:
+        type: string
+      qualification:
+        type: string
       specialization:
+        type: string
+      state:
         type: string
       user_id:
         type: string

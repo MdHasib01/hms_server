@@ -75,8 +75,21 @@ type CreateDoctorPayload struct {
 	Username       string `json:"username" validate:"required,max=100"`
 	Email          string `json:"email" validate:"required,email,max=255"`
 	Password       string `json:"password" validate:"required,min=3,max=72"`
-	Specialization string `json:"specialization" validate:"required,max=100"`
-	LicenseNumber  string `json:"license_number" validate:"required,max=50"`
+	FirstName      string `json:"firstname" validate:"required,max=100"`
+	LastName       string `json:"lastname" validate:"required,max=100"`
+	Age            string `json:"age" validate:"required"`
+	Gender         string `json:"gender" validate:"required"`
+	MaritalStatus  string `json:"marital_status" validate:"required"`
+	Designation    string `json:"designation" validate:"required"`
+	Qualification  string `json:"qualification" validate:"required"`
+	BloodGroup     string `json:"blood_group" validate:"required"`
+	Address        string `json:"address" validate:"required"`
+	Country        string `json:"country" validate:"required"`
+	State          string `json:"state" validate:"required"`
+	City           string `json:"city" validate:"required"`
+	PostalCode     string `json:"postal_code" validate:"required"`
+	Specialization string `json:"specialization" validate:"required"`
+	LicenseNumber  string `json:"license_number" validate:"required"`
 }
 
 // CreateDoctorHandler godoc
@@ -125,7 +138,7 @@ func (app *application) CreateDoctorHandler(w http.ResponseWriter, r *http.Reque
 	hashToken := hex.EncodeToString(hash[:])
 
 	// Step 4: Save user in DB with invitation
-	err := app.store.Users.CreateAndInvite(ctx, user, hashToken, app.config.mail.exp) // 2 = doctor role
+	err := app.store.Users.CreateAndInvite(ctx, user, hashToken, app.config.mail.exp)
 	if err != nil {
 		switch err {
 		case store.ErrDuplicateEmail, store.ErrDuplicateUsername:
@@ -141,6 +154,19 @@ func (app *application) CreateDoctorHandler(w http.ResponseWriter, r *http.Reque
 		UserID:         user.ID,
 		UserName:       user.Username,
 		Email:          user.Email,
+		FirstName:      payload.FirstName,
+		LastName:       payload.LastName,
+		Age:            payload.Age,
+		Gender:         payload.Gender,
+		MaritalStatus:  payload.MaritalStatus,
+		Designation:    payload.Designation,
+		Qualification:  payload.Qualification,
+		BloodGroup:     payload.BloodGroup,
+		Address:        payload.Address,
+		Country:        payload.Country,
+		State:          payload.State,
+		City:           payload.City,
+		PostalCode:     payload.PostalCode,
 		Specialization: payload.Specialization,
 		LicenseNumber:  payload.LicenseNumber,
 	}
@@ -168,28 +194,51 @@ func (app *application) CreateDoctorHandler(w http.ResponseWriter, r *http.Reque
 	status, err := app.mailer.Send(mailer.UserWelcomeTemplate, user.Username, user.Email, vars, !isProdEnv)
 	if err != nil {
 		app.logger.Errorw("error sending welcome email", "error", err)
-
-		// rollback both doctor + user if email fails
 		_ = app.store.Doctors.Delete(ctx, doctor.UserID)
 		_ = app.store.Users.Delete(ctx, user.ID)
-
 		app.internalServerError(w, r, err)
 		return
 	}
 
 	app.logger.Infow("Email sent", "status", status)
 
-	// Step 7: Return Success Response
+	// Step 7: Return Full Doctor Profile Response (excluding password)
 	resp := struct {
-		ID             uuid.UUID `json:"id"`
-		Username       string    `json:"username"`
+		UserID         uuid.UUID `json:"user_id"`
+		UserName       string    `json:"username"`
 		Email          string    `json:"email"`
+		FirstName      string    `json:"firstname"`
+		LastName       string    `json:"lastname"`
+		Age            string    `json:"age"`
+		Gender         string    `json:"gender"`
+		MaritalStatus  string    `json:"marital_status"`
+		Designation    string    `json:"designation"`
+		Qualification  string    `json:"qualification"`
+		BloodGroup     string    `json:"blood_group"`
+		Address        string    `json:"address"`
+		Country        string    `json:"country"`
+		State          string    `json:"state"`
+		City           string    `json:"city"`
+		PostalCode     string    `json:"postal_code"`
 		Specialization string    `json:"specialization"`
 		LicenseNumber  string    `json:"license_number"`
 	}{
-		ID:             user.ID,
-		Username:       user.Username,
-		Email:          user.Email,
+		UserID:         doctor.UserID,
+		UserName:       doctor.UserName,
+		Email:          doctor.Email,
+		FirstName:      doctor.FirstName,
+		LastName:       doctor.LastName,
+		Age:            doctor.Age,
+		Gender:         doctor.Gender,
+		MaritalStatus:  doctor.MaritalStatus,
+		Designation:    doctor.Designation,
+		Qualification:  doctor.Qualification,
+		BloodGroup:     doctor.BloodGroup,
+		Address:        doctor.Address,
+		Country:        doctor.Country,
+		State:          doctor.State,
+		City:           doctor.City,
+		PostalCode:     doctor.PostalCode,
 		Specialization: doctor.Specialization,
 		LicenseNumber:  doctor.LicenseNumber,
 	}

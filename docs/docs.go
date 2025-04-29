@@ -379,29 +379,81 @@ const docTemplate = `{
         "main.CreateDoctorPayload": {
             "type": "object",
             "required": [
+                "address",
+                "age",
+                "blood_group",
+                "city",
+                "country",
+                "designation",
                 "email",
+                "firstname",
+                "gender",
+                "lastname",
                 "license_number",
+                "marital_status",
                 "password",
+                "postal_code",
+                "qualification",
                 "specialization",
+                "state",
                 "username"
             ],
             "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "string"
+                },
+                "blood_group": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "designation": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string",
                     "maxLength": 255
                 },
-                "license_number": {
+                "firstname": {
                     "type": "string",
-                    "maxLength": 50
+                    "maxLength": 100
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "license_number": {
+                    "type": "string"
+                },
+                "marital_status": {
+                    "type": "string"
                 },
                 "password": {
                     "type": "string",
                     "maxLength": 72,
                     "minLength": 3
                 },
+                "postal_code": {
+                    "type": "string"
+                },
+                "qualification": {
+                    "type": "string"
+                },
                 "specialization": {
-                    "type": "string",
-                    "maxLength": 100
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
                 },
                 "username": {
                     "type": "string",
@@ -499,13 +551,58 @@ const docTemplate = `{
         "store.Doctor": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "string"
+                },
+                "availability": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "blood_group": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "designation": {
+                    "type": "string"
+                },
                 "email": {
+                    "type": "string"
+                },
+                "firstname": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "lastname": {
                     "type": "string"
                 },
                 "license_number": {
                     "type": "string"
                 },
+                "marital_status": {
+                    "type": "string"
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "qualification": {
+                    "type": "string"
+                },
                 "specialization": {
+                    "type": "string"
+                },
+                "state": {
                     "type": "string"
                 },
                 "user_id": {
