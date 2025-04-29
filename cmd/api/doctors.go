@@ -103,6 +103,7 @@ type CreateDoctorPayload struct {
 //	@Success		201		{object}	store.Doctor
 //	@Failure		400		{object}	error
 //	@Failure		500		{object}	error
+//	@Security		ApiKeyAuth
 //	@Router			/doctors [post]
 func (app *application) CreateDoctorHandler(w http.ResponseWriter, r *http.Request) {
 	var payload CreateDoctorPayload
@@ -244,6 +245,32 @@ func (app *application) CreateDoctorHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 	if err := app.jsonResponse(w, http.StatusCreated, resp); err != nil {
+		app.internalServerError(w, r, err)
+	}
+}
+
+// getAllDoctorsHandler godoc
+//
+//	@Summary		Fetches All doctors
+//	@Description	Fetches all doctors
+//	@Tags			doctor
+//	@Accept			json
+//	@Produce		json
+//	@Success		204	{array}		[]store.Doctor	"Doctors Found"
+//	@Failure		400	{object}	error			"Doctor Id  missing"
+//	@Failure		404	{object}	error			"Dctor not found"
+//	@Security		ApiKeyAuth
+//	@Router			/doctors [get]
+func (app *application) getAllDoctorsHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	doctors, err := app.store.Doctors.GetAllDoctors(ctx)
+	if err != nil {
+		app.internalServerError(w, r, err)
+		return
+	}
+
+	if err := app.jsonResponse(w, http.StatusOK, doctors); err != nil {
 		app.internalServerError(w, r, err)
 	}
 }

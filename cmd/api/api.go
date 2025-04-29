@@ -108,7 +108,9 @@ func (app *application) mount() http.Handler {
 
 		// Doctor routes
 		r.Route("/doctors", func(r chi.Router) {
+			// r.Use(app.AuthTokenMiddleware)
 			r.Post("/", app.CreateDoctorHandler)
+			r.Get("/", app.getAllDoctorsHandler)
 			r.Route("/{doctorID}", func(r chi.Router) {
 				r.Use(app.AuthTokenMiddleware)
 				r.Use(app.doctorContextMiddleware)

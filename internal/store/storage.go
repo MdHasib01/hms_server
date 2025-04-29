@@ -20,6 +20,7 @@ type Storage struct {
 		GetByID(context.Context, uuid.UUID) (*Doctor, error)
 		Create(context.Context, *Doctor) error
 		Delete(context.Context, uuid.UUID) error
+		GetAllDoctors(context.Context) ([]*Doctor, error)
 	}
 	Users interface {
 		GetByID(context.Context, uuid.UUID) (*User, error)

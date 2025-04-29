@@ -38,21 +38,54 @@ type DoctorStore struct {
 
 func (s *DoctorStore) GetByID(ctx context.Context, id uuid.UUID) (*Doctor, error) {
 	query := `
-	SELECT 
-		u.id, u.username, u.email, u.firstname, u.lastname, u.age, u.gender,
-		u.marital_status, u.designation, u.qualification, u.blood_group,
-		u.address, u.country, u.state, u.city, u.postal_code,
-		d.specialization, d.license_number,
-		COALESCE(json_agg(a.available_day) FILTER (WHERE a.available_day IS NOT NULL), '[]') AS availability
-	FROM users u
-	INNER JOIN doctors d ON d.user_id = u.id
-	LEFT JOIN availability a ON a.doctor_id = u.id
-	WHERE u.id = $1
-	GROUP BY 
-		u.id, u.username, u.email, u.firstname, u.lastname, u.age, u.gender,
-		u.marital_status, u.designation, u.qualification, u.blood_group,
-		u.address, u.country, u.state, u.city, u.postal_code,
-		d.specialization, d.license_number
+	
+SELECT 
+    u.id,
+    u.username,
+    u.email,
+    d.firstname,
+    d.lastname,
+    d.age,
+    d.gender,
+    d.marital_status,
+    d.designation,
+    d.qualification,
+    d.blood_group,
+    d.address,
+    d.country,
+    d.state,
+    d.city,
+    d.postal_code,
+    d.specialization,
+    d.license_number,
+    COALESCE(
+        json_agg(a.available_day) 
+        FILTER (WHERE a.available_day IS NOT NULL), 
+        '[]'
+    ) AS availability
+FROM users u
+INNER JOIN doctors d ON d.user_id = u.id
+LEFT JOIN availability a ON a.doctor_id = d.user_id
+WHERE u.id = $1
+GROUP BY 
+    u.id,
+    u.username,
+    u.email,
+    d.firstname,
+    d.lastname,
+    d.age,
+    d.gender,
+    d.marital_status,
+    d.designation,
+    d.qualification,
+    d.blood_group,
+    d.address,
+    d.country,
+    d.state,
+    d.city,
+    d.postal_code,
+    d.specialization,
+    d.license_number;
 	`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
@@ -93,6 +126,104 @@ func (s *DoctorStore) GetByID(ctx context.Context, id uuid.UUID) (*Doctor, error
 	_ = json.Unmarshal(availabilityJSON, &doctor.Availability)
 
 	return doctor, nil
+}
+
+func (s *DoctorStore) GetAllDoctors(ctx context.Context) ([]*Doctor, error) {
+	query := `
+	
+SELECT 
+    u.id,
+    u.username,
+    u.email,
+    d.firstname,
+    d.lastname,
+    d.age,
+    d.gender,
+    d.marital_status,
+    d.designation,
+    d.qualification,
+    d.blood_group,
+    d.address,
+    d.country,
+    d.state,
+    d.city,
+    d.postal_code,
+    d.specialization,
+    d.license_number,
+    COALESCE(
+        json_agg(a.available_day) 
+        FILTER (WHERE a.available_day IS NOT NULL), 
+        '[]'
+    ) AS availability
+FROM users u
+INNER JOIN doctors d ON d.user_id = u.id
+LEFT JOIN availability a ON a.doctor_id = d.user_id
+GROUP BY 
+    u.id,
+    u.username,
+    u.email,
+    d.firstname,
+    d.lastname,
+    d.age,
+    d.gender,
+    d.marital_status,
+    d.designation,
+    d.qualification,
+    d.blood_group,
+    d.address,
+    d.country,
+    d.state,
+    d.city,
+    d.postal_code,
+    d.specialization,
+    d.license_number;
+	`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	rows, err := s.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	doctors := []*Doctor{}
+
+	for rows.Next() {
+		var availabilityJSON []byte
+		doctor := &Doctor{}
+		err := rows.Scan(
+			&doctor.UserID,
+			&doctor.UserName,
+			&doctor.Email,
+			&doctor.FirstName,
+			&doctor.LastName,
+			&doctor.Age,
+			&doctor.Gender,
+			&doctor.MaritalStatus,
+			&doctor.Designation,
+			&doctor.Qualification,
+			&doctor.BloodGroup,
+			&doctor.Address,
+			&doctor.Country,
+			&doctor.State,
+			&doctor.City,
+			&doctor.PostalCode,
+			&doctor.Specialization,
+			&doctor.LicenseNumber,
+			&availabilityJSON,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		_ = json.Unmarshal(availabilityJSON, &doctor.Availability)
+
+		doctors = append(doctors, doctor)
+	}
+
+	return doctors, nil
 }
 
 func (s *DoctorStore) Create(ctx context.Context, doctor *Doctor) error {

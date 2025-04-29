@@ -113,7 +113,52 @@ const docTemplate = `{
             }
         },
         "/doctors": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Fetches all doctors",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "doctor"
+                ],
+                "summary": "Fetches All doctors",
+                "responses": {
+                    "204": {
+                        "description": "Doctors Found",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/store.Doctor"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Doctor Id  missing",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Dctor not found",
+                        "schema": {}
+                    }
+                }
+            },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Creates a new doctor user and doctor profile",
                 "consumes": [
                     "application/json"

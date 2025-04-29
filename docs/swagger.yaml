@@ -278,6 +278,32 @@ paths:
       tags:
       - authentication
   /doctors:
+    get:
+      consumes:
+      - application/json
+      description: Fetches all doctors
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Doctors Found
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/store.Doctor'
+              type: array
+            type: array
+        "400":
+          description: Doctor Id  missing
+          schema: {}
+        "404":
+          description: Dctor not found
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Fetches All doctors
+      tags:
+      - doctor
     post:
       consumes:
       - application/json
@@ -302,6 +328,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Creates a doctor account
       tags:
       - doctor
