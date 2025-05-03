@@ -98,3 +98,28 @@ func getUserFromContext(r *http.Request) *store.User {
 	user, _ := r.Context().Value(userCtx).(*store.User)
 	return user
 }
+
+// GetPatients godoc
+//
+//	@Summary		Get all patients
+//	@Description	Returns a list of users with role_id = 1 (patients)
+//	@Tags			users
+//	@Produce		json
+//	@Success		200	{array}		store.UserMinimal
+//	@Failure		500	{object}	error
+//	@Router			/users/patients [get]
+//	@Security		ApiKeyAuth
+func (app *application) getPatientsByRoleHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	// 1 = Patient role_id
+	patients, err := app.store.Users.GetByRole(ctx, 1)
+	if err != nil {
+		app.internalServerError(w, r, err)
+		return
+	}
+
+	if err := app.jsonResponse(w, http.StatusOK, patients); err != nil {
+		app.internalServerError(w, r, err)
+	}
+}

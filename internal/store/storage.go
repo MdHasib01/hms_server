@@ -30,6 +30,11 @@ type Storage struct {
 		Activate(context.Context, string) error
 		Delete(context.Context, uuid.UUID) error
 		CreateWithRole(context.Context, *User, int) error
+		GetByRole(context.Context, int) ([]UserMinimal, error)
+	}
+	Appointments interface {
+		Create(context.Context, *Appointment) error
+		GetAllAppointments(context.Context) ([]*Appointment, error)
 	}
 
 	Availability interface {
@@ -42,9 +47,11 @@ type Storage struct {
 
 func NewStorage(db *sql.DB) Storage {
 	return Storage{
-		Doctors: &DoctorStore{db},
-		Users:   &UserStore{db},
-		Roles:   &RoleStore{db},
+		Doctors:      &DoctorStore{db},
+		Users:        &UserStore{db},
+		Roles:        &RoleStore{db},
+		Appointments: &AppointmentStore{db},
+		Availability: &AvailabilityStore{db},
 	}
 }
 

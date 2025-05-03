@@ -1,5 +1,18 @@
 basePath: /v1
 definitions:
+  main.CreateAppointmentPayload:
+    properties:
+      appointment_time:
+        type: string
+      doctor_id:
+        type: string
+      patient_id:
+        type: string
+    required:
+    - appointment_time
+    - doctor_id
+    - patient_id
+    type: object
   main.CreateAvailabilityPayload:
     properties:
       available_day:
@@ -124,6 +137,25 @@ definitions:
       username:
         type: string
     type: object
+  store.Appointment:
+    properties:
+      appointment_time:
+        type: string
+      doctor_first_name:
+        type: string
+      doctor_id:
+        type: string
+      doctor_last_name:
+        type: string
+      id:
+        type: string
+      patient_first_name:
+        type: string
+      patient_id:
+        type: string
+      patient_last_name:
+        type: string
+    type: object
   store.Availability:
     properties:
       available_day:
@@ -206,6 +238,13 @@ definitions:
       username:
         type: string
     type: object
+  store.UserMinimal:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+    type: object
 info:
   contact:
     email: support@swagger.io
@@ -218,6 +257,58 @@ info:
   termsOfService: http://swagger.io/terms/
   title: GopherSocial API
 paths:
+  /appointments:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all appointments, showing patient and doctor names with
+        appointment times
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/store.Appointment'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Get all appointments with patient and doctor info
+      tags:
+      - appointment
+    post:
+      consumes:
+      - application/json
+      description: Creates a new appointment
+      parameters:
+      - description: Appointment Details
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateAppointmentPayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/store.Appointment'
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Create new appointment
+      tags:
+      - appointment
   /authentication/token:
     post:
       consumes:
@@ -462,6 +553,26 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Activates/Register a user
+      tags:
+      - users
+  /users/patients:
+    get:
+      description: Returns a list of users with role_id = 1 (patients)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/store.UserMinimal'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Get all patients
       tags:
       - users
 securityDefinitions:

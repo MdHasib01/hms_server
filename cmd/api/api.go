@@ -105,7 +105,7 @@ func (app *application) mount() http.Handler {
 
 		r.Route("/users", func(r chi.Router) {
 			r.Put("/activate/{token}", app.activateUserHandler)
-
+			r.Get("/patients", app.getPatientsByRoleHandler)
 			r.Route("/{userID}", func(r chi.Router) {
 				r.Use(app.AuthTokenMiddleware)
 
@@ -131,6 +131,13 @@ func (app *application) mount() http.Handler {
 				r.Use(app.AuthTokenMiddleware)
 				r.Post("/", app.activateUserHandler)
 			})
+
+		})
+		// Doctor routes
+		r.Route("/appointments", func(r chi.Router) {
+			// r.Use(app.AuthTokenMiddleware)
+			r.Post("/", app.CreateAppointmentHandler)
+			r.Get("/", app.GetAllAppointmentsHandler)
 
 		})
 

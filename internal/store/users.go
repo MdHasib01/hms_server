@@ -46,6 +46,14 @@ func (p *password) Set(text string) error {
 	return nil
 }
 
+func (p *password) Compare(text string) error {
+	if err := bcrypt.CompareHashAndPassword(p.hash, []byte(text)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type UserStore struct {
 	db *sql.DB
 }
@@ -321,4 +329,37 @@ func (s *UserStore) CreateWithRole(ctx context.Context, user *User, roleID int) 
 	}
 
 	return nil
+}
+
+type UserMinimal struct {
+	ID    uuid.UUID `json:"id"`
+	Email string    `json:"email"`
+}
+
+func (s *UserStore) GetByRole(ctx context.Context, roleID int) ([]UserMinimal, error) {
+	query := `SELECT id, email FROM users WHERE role_id = $1 AND is_active = true`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	rows, err := s.db.QueryContext(ctx, query, roleID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []UserMinimal
+	for rows.Next() {
+		var user UserMinimal
+		if err := rows.Scan(&user.ID, &user.Email); err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
