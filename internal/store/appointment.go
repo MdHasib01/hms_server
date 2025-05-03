@@ -9,14 +9,12 @@ import (
 )
 
 type Appointment struct {
-	ID               uuid.UUID `json:"id"`
-	DoctorID         uuid.UUID `json:"doctor_id"`
-	PatientID        uuid.UUID `json:"patient_id"`
-	AppointmentTime  time.Time `json:"appointment_time"`
-	DoctorFirstName  string    `json:"doctor_first_name"`
-	DoctorLastName   string    `json:"doctor_last_name"`
-	PatientFirstName string    `json:"patient_first_name"`
-	PatientLastName  string    `json:"patient_last_name"`
+	ID              uuid.UUID `json:"id"`
+	DoctorID        uuid.UUID `json:"doctor_id"`
+	PatientID       uuid.UUID `json:"patient_id"`
+	AppointmentTime time.Time `json:"appointment_time"`
+	DoctorEmail     string    `json:"doctor_first_name"`
+	PatientEmail    string    `json:"patient_email"`
 }
 
 type AppointmentStore struct {
@@ -53,10 +51,8 @@ func (s *AppointmentStore) GetAllAppointments(ctx context.Context) ([]*Appointme
 			a.doctor_id,
 			a.patient_id,
 			a.appointment_time,
-			u_patient.first_name AS patient_first_name,
-			u_patient.last_name AS patient_last_name,
-			u_doctor.first_name AS doctor_first_name,
-			u_doctor.last_name AS doctor_last_name
+			u_patient.email AS patient_email,
+			u_doctor.email AS doctor_email
 		FROM appointment a
 		JOIN users u_patient ON a.patient_id = u_patient.id
 		JOIN doctors d ON a.doctor_id = d.user_id
@@ -81,10 +77,8 @@ func (s *AppointmentStore) GetAllAppointments(ctx context.Context) ([]*Appointme
 			&appointment.DoctorID,
 			&appointment.PatientID,
 			&appointment.AppointmentTime,
-			&appointment.PatientFirstName,
-			&appointment.PatientLastName,
-			&appointment.DoctorFirstName,
-			&appointment.DoctorLastName,
+			&appointment.PatientEmail,
+			&appointment.DoctorEmail,
 		)
 		if err != nil {
 			return nil, err

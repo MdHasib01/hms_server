@@ -711,19 +711,13 @@
                 "doctor_id": {
                     "type": "string"
                 },
-                "doctor_last_name": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "string"
                 },
-                "patient_first_name": {
+                "patient_email": {
                     "type": "string"
                 },
                 "patient_id": {
-                    "type": "string"
-                },
-                "patient_last_name": {
                     "type": "string"
                 }
             }
