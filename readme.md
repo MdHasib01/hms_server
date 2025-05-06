@@ -1,118 +1,172 @@
+# Medicore HMS Backend
 
-# Hi there 👋 I'm **Md Hasib**
-### 💻 Full-Stack MERN Developer | Passionate Problem Solver
+A robust Hospital Management System backend built with Go, Chi router, and PostgreSQL.
 
----
+## Overview
 
-## 🚀 About Me
+Medicore HMS is a comprehensive Hospital Management System designed to streamline hospital operations, manage appointments between doctors and patients, and maintain medical records securely. This repository contains the backend API service that powers the Medicore HMS application.
 
-I’m a passionate **Full-Stack Developer** focused on building fast, responsive, and scalable web applications.  
-I specialize in the **MERN stack** and love learning and working with new technologies.  
-Always aiming to deliver clean, maintainable, and user-friendly software.
+## Tech Stack
 
-- 🔥 Strong foundation in **JavaScript**, **Node.js**, and **React.js**
-- 🎯 Interested in solving real-world problems with tech
-- 📚 Lifelong learner and tech enthusiast
+- **Language**: Go
+- **Web Framework**: [Chi Router](https://github.com/go-chi/chi)
+- **Database**: PostgreSQL
+- **API Documentation**: Swagger 2.0
+- **Authentication**: JWT-based token authentication
 
----
+## Features
 
-## 🛠️ Tech Stack
+- 🔐 **Secure Authentication System** - Register, login, and token-based authentication
+- 👨‍⚕️ **Doctor Management** - Create and manage doctor profiles with specializations
+- 🗓️ **Appointment Scheduling** - Book and manage appointments between doctors and patients
+- 👥 **User/Patient Management** - User registration and profile management
+- ⏰ **Doctor Availability** - Track and manage doctor schedules and availability
+- 🔍 **User Role Management** - Different access levels for different user types
 
-<div align="center">
+## API Endpoints
 
-<!-- Languages -->
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
-<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
-<img src="https://img.shields.io/badge/GoLang-00ADD8?style=for-the-badge&logo=go&logoColor=white" />
-<img src="https://img.shields.io/badge/SQL-003B57?style=for-the-badge&logo=postgresql&logoColor=white" />
-<img src="https://img.shields.io/badge/NoSQL-4DB33D?style=for-the-badge&logo=mongodb&logoColor=white" />
+### Authentication
 
-<!-- Frontend -->
-<br />
-<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
-<img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" />
-<img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white" />
-<img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
-<img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" />
-<img src="https://img.shields.io/badge/Shadcn-000000?style=for-the-badge" />
-<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
-<img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
+- `POST /v1/authentication/user` - Register a new user
+- `POST /v1/authentication/token` - Create authentication token (login)
 
-<!-- Backend -->
-<br />
-<img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" />
-<img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white" />
+### Users
 
-<!-- Database -->
-<br />
-<img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
-<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" />
-<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
+- `GET /v1/users/{id}` - Fetch a user profile by ID
+- `GET /v1/users/patients` - Get all patients in the system
+- `PUT /v1/users/activate/{token}` - Activate a user account via invitation token
 
-<!-- ORMs/ODMs -->
-<br />
-<img src="https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white" />
-<img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" />
+### Doctors
 
-<!-- DevOps -->
-<br />
-<img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" />
-<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
-<img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" />
-<img src="https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white" />
-<img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white" />
+- `GET /v1/doctors` - Fetch all doctors
+- `POST /v1/doctors` - Create a new doctor account
+- `GET /v1/doctors/{doctorID}` - Fetch a specific doctor by ID
+- `POST /v1/doctors/availability` - Create doctor availability slots
 
-</div>
+### Appointments
 
----
+- `GET /v1/appointments` - Get all appointments with patient and doctor information
+- `POST /v1/appointments` - Create a new appointment
 
-## 📈 GitHub Stats
+### System
 
-| ![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=MdHasib01&layout=compact&theme=radical) | ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=MdHasib01&show_icons=true&theme=radical) |
-|:---|:---|
+- `GET /v1/health` - System health check endpoint
 
----
+## Getting Started
 
-## 🔥 GitHub Streak
+### Prerequisites
 
-<p align="center">
-  <img src="https://streak-stats.demolab.com/?user=MdHasib01&theme=tokyonight" alt="GitHub Streak" />
-</p>
+- Go 1.16 or higher
+- PostgreSQL 12 or higher
+- Git
 
----
+### Installation
 
-## 🏆 GitHub Trophies
+1. Clone the repository
 
-<p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=MdHasib01&theme=radical&no-frame=true&no-bg=true&margin-w=4" alt="GitHub Trophies" />
-</p>
+   ```bash
+   git clone https://github.com/MdHasib01/hms_server
+   cd medicore-hms
+   ```
 
----
+2. Install dependencies
 
-## 🧮 Visitor Counter
+   ```bash
+   go mod download
+   ```
 
-<p align="center">
-  <img src="https://komarev.com/ghpvc/?username=MdHasib01&style=for-the-badge" alt="Profile Views" />
-</p>
+3. Set up environment variables
 
----
+   ```bash
+   cp .env.example .env
+   # Edit .env with your database credentials and other configuration
+   ```
 
-## 📫 Connect with Me
+4. Set up the database
 
-[<img src='https://cdn.jsdelivr.net/npm/simple-icons@v5/icons/github.svg' alt='GitHub' height='30'>](https://github.com/MdHasib01) &nbsp;
-[<img src='https://cdn.jsdelivr.net/npm/simple-icons@v5/icons/linkedin.svg' alt='LinkedIn' height='30'>](https://www.linkedin.com/in/md-hasib01/) &nbsp;
-[<img src='https://cdn.jsdelivr.net/npm/simple-icons@v5/icons/internetarchive.svg' alt='Website' height='30'>](https://mdhasib.netlify.app/)
+   ```bash
+   # Create the database
+   createdb medicore_hms
 
----
+   # Run migrations (if applicable)
+   go run cmd/migrate/main.go
+   ```
 
-# 🚀 Let's Build the Future Together! 🚀
+5. Run the application
+   ```bash
+   go run cmd/api/main.go
+   ```
 
----
+The API will be available at `http://localhost:8080` (or the port specified in your configuration).
 
-> **Now your README looks 🔥🔥 like a PRO developer!**
+## Database Schema
 
----
+The system uses the following main entities:
 
-Would you also like me to give you the **final ready `.md` file**? 📄  
-(You can just upload it straight to GitHub, no need to copy-paste.) 🚀  
-Should I prepare that for you? 🎯
+- **Users**: Base user accounts (patients, doctors, admins)
+- **Roles**: User permission levels
+- **Doctors**: Extended profile information for medical professionals
+- **Appointments**: Scheduled meetings between doctors and patients
+- **Availability**: Doctor's available time slots
+
+## API Authentication
+
+The API uses JWT token-based authentication. To access protected endpoints:
+
+1. Register or login to get your token
+2. Include the token in the Authorization header of your requests:
+   ```
+   Authorization: Bearer your_token_here
+   ```
+
+## Development
+
+### Running Tests
+
+```bash
+go test ./...
+```
+
+### API Documentation
+
+Swagger documentation is available at `/swagger/index.html` when the server is running.
+
+You can also find the full API specification in the `swagger.json` file.
+
+## Deployment
+
+### Docker
+
+```bash
+# Build the Docker image
+docker build -t medicore-hms .
+
+# Run the container
+docker run -p 8080:8080 --env-file .env medicore-hms
+```
+
+### Production Considerations
+
+- Set up proper SSL/TLS certificates for HTTPS
+- Configure proper database connection pooling
+- Set up monitoring and logging
+- Implement database backups
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the Apache 2.0 License - see the LICENSE file for details.
+
+## Contact
+
+For support or inquiries, please contact:
+
+- Email: md.hasibuzzaman001@gmail.com
+- Issue Tracker: [GitHub Issues](https://github.com/MdHasib01/hms_server)

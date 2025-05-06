@@ -1,869 +1,792 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "description": "API for GopherSocial, a social network for gohpers",
-        "title": "GopherSocial API",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        }
+  "swagger": "2.0",
+  "info": {
+    "description": "API for MedicoreHMS, a Hospital Management System",
+    "title": "MedicoreHMS API",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "name": "API Support",
+      "url": "http://www.swagger.io/support",
+      "email": "support@swagger.io"
     },
-    "basePath": "/v1",
-    "paths": {
-        "/appointments": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Retrieves all appointments, showing patient and doctor names with appointment times",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "appointment"
-                ],
-                "summary": "Get all appointments with patient and doctor info",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/store.Appointment"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {}
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Creates a new appointment",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "appointment"
-                ],
-                "summary": "Create new appointment",
-                "parameters": [
-                    {
-                        "description": "Appointment Details",
-                        "name": "payload",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/main.CreateAppointmentPayload"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/store.Appointment"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {}
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {}
-                    }
-                }
-            }
-        },
-        "/authentication/token": {
-            "post": {
-                "description": "Creates a token for a user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "authentication"
-                ],
-                "summary": "Creates a token",
-                "parameters": [
-                    {
-                        "description": "User credentials",
-                        "name": "payload",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/main.CreateUserTokenPayload"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Token",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {}
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {}
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {}
-                    }
-                }
-            }
-        },
-        "/authentication/user": {
-            "post": {
-                "description": "Registers a user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "authentication"
-                ],
-                "summary": "Registers a user",
-                "parameters": [
-                    {
-                        "description": "User credentials",
-                        "name": "payload",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/main.RegisterUserPayload"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "User registered",
-                        "schema": {
-                            "$ref": "#/definitions/main.UserWithToken"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {}
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {}
-                    }
-                }
-            }
-        },
-        "/doctors": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Fetches all doctors",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "doctor"
-                ],
-                "summary": "Fetches All doctors",
-                "responses": {
-                    "204": {
-                        "description": "Doctors Found",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/store.Doctor"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Doctor Id  missing",
-                        "schema": {}
-                    },
-                    "404": {
-                        "description": "Dctor not found",
-                        "schema": {}
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Creates a new doctor user and doctor profile",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "doctor"
-                ],
-                "summary": "Creates a doctor account",
-                "parameters": [
-                    {
-                        "description": "Doctor user and profile information",
-                        "name": "payload",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/main.CreateDoctorPayload"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/store.Doctor"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {}
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {}
-                    }
-                }
-            }
-        },
-        "/doctors/availability": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Creates an availability entry for a doctor",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "doctor"
-                ],
-                "summary": "Creates a new availability entry",
-                "parameters": [
-                    {
-                        "description": "Availability details",
-                        "name": "payload",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/main.CreateAvailabilityPayload"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/store.Availability"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {}
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {}
-                    }
-                }
-            }
-        },
-        "/doctors/{doctorID}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Fetches the doctor by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "doctor"
-                ],
-                "summary": "Fetches the doctor by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Doctor ID",
-                        "name": "doctorID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "Doctor Found",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Doctor Id  missing",
-                        "schema": {}
-                    },
-                    "404": {
-                        "description": "Dctor not found",
-                        "schema": {}
-                    }
-                }
-            }
-        },
-        "/health": {
-            "get": {
-                "description": "Healthcheck endpoint",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ops"
-                ],
-                "summary": "Healthcheck",
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/users/activate/{token}": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Activates/Register a user by invitation token",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Activates/Register a user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Invitation token",
-                        "name": "token",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "User activated",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {}
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {}
-                    }
-                }
-            }
-        },
-        "/users/patients": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Returns a list of users with role_id = 1 (patients)",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Get all patients",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/store.UserMinimal"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {}
-                    }
-                }
-            }
-        },
-        "/users/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Fetches a user profile by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Fetches a user profile",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/store.User"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {}
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {}
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {}
-                    }
-                }
-            }
-        }
-    },
-    "definitions": {
-        "main.CreateAppointmentPayload": {
-            "type": "object",
-            "required": [
-                "appointment_time",
-                "doctor_id",
-                "patient_id"
-            ],
-            "properties": {
-                "appointment_time": {
-                    "type": "string"
-                },
-                "doctor_id": {
-                    "type": "string"
-                },
-                "patient_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "main.CreateAvailabilityPayload": {
-            "type": "object",
-            "properties": {
-                "available_day": {
-                    "type": "string"
-                },
-                "doctor_id": {
-                    "type": "string"
-                },
-                "ends_at": {
-                    "type": "string"
-                },
-                "starts_from": {
-                    "type": "string"
-                }
-            }
-        },
-        "main.CreateDoctorPayload": {
-            "type": "object",
-            "required": [
-                "address",
-                "age",
-                "blood_group",
-                "city",
-                "country",
-                "designation",
-                "email",
-                "firstname",
-                "gender",
-                "lastname",
-                "license_number",
-                "marital_status",
-                "password",
-                "postal_code",
-                "qualification",
-                "specialization",
-                "state",
-                "username"
-            ],
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "age": {
-                    "type": "string"
-                },
-                "blood_group": {
-                    "type": "string"
-                },
-                "city": {
-                    "type": "string"
-                },
-                "country": {
-                    "type": "string"
-                },
-                "designation": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string",
-                    "maxLength": 255
-                },
-                "firstname": {
-                    "type": "string",
-                    "maxLength": 100
-                },
-                "gender": {
-                    "type": "string"
-                },
-                "lastname": {
-                    "type": "string",
-                    "maxLength": 100
-                },
-                "license_number": {
-                    "type": "string"
-                },
-                "marital_status": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 72,
-                    "minLength": 3
-                },
-                "postal_code": {
-                    "type": "string"
-                },
-                "qualification": {
-                    "type": "string"
-                },
-                "specialization": {
-                    "type": "string"
-                },
-                "state": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string",
-                    "maxLength": 100
-                }
-            }
-        },
-        "main.CreateUserTokenPayload": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "maxLength": 255
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 72,
-                    "minLength": 3
-                }
-            }
-        },
-        "main.RegisterUserPayload": {
-            "type": "object",
-            "required": [
-                "email",
-                "password",
-                "username"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "maxLength": 255
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 72,
-                    "minLength": 3
-                },
-                "username": {
-                    "type": "string",
-                    "maxLength": 100
-                }
-            }
-        },
-        "main.UserWithToken": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "is_active": {
-                    "type": "boolean"
-                },
-                "role": {
-                    "$ref": "#/definitions/store.Role"
-                },
-                "role_id": {
-                    "type": "integer"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "store.Appointment": {
-            "type": "object",
-            "properties": {
-                "appointment_time": {
-                    "type": "string"
-                },
-                "doctor_first_name": {
-                    "type": "string"
-                },
-                "doctor_id": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "patient_email": {
-                    "type": "string"
-                },
-                "patient_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "store.Availability": {
-            "type": "object",
-            "properties": {
-                "available_day": {
-                    "type": "string"
-                },
-                "doctor_id": {
-                    "type": "string"
-                },
-                "ends_at": {
-                    "type": "string"
-                },
-                "starts_from": {
-                    "type": "string"
-                }
-            }
-        },
-        "store.Doctor": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "age": {
-                    "type": "string"
-                },
-                "availability": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "blood_group": {
-                    "type": "string"
-                },
-                "city": {
-                    "type": "string"
-                },
-                "country": {
-                    "type": "string"
-                },
-                "designation": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "firstname": {
-                    "type": "string"
-                },
-                "gender": {
-                    "type": "string"
-                },
-                "lastname": {
-                    "type": "string"
-                },
-                "license_number": {
-                    "type": "string"
-                },
-                "marital_status": {
-                    "type": "string"
-                },
-                "postal_code": {
-                    "type": "string"
-                },
-                "qualification": {
-                    "type": "string"
-                },
-                "specialization": {
-                    "type": "string"
-                },
-                "state": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "store.Role": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "level": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "store.User": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "is_active": {
-                    "type": "boolean"
-                },
-                "role": {
-                    "$ref": "#/definitions/store.Role"
-                },
-                "role_id": {
-                    "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "store.UserMinimal": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                }
-            }
-        }
-    },
-    "securityDefinitions": {
-        "ApiKeyAuth": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
-        }
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
+  },
+  "basePath": "/v1",
+  "paths": {
+    "/appointments": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "Retrieves all appointments, showing patient and doctor names with appointment times",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["appointment"],
+        "summary": "Get all appointments with patient and doctor info",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/store.Appointment"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "Creates a new appointment",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["appointment"],
+        "summary": "Create new appointment",
+        "parameters": [
+          {
+            "description": "Appointment Details",
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/main.CreateAppointmentPayload"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/store.Appointment"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        }
+      }
+    },
+    "/authentication/token": {
+      "post": {
+        "description": "Creates a token for a user",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["authentication"],
+        "summary": "Creates a token",
+        "parameters": [
+          {
+            "description": "User credentials",
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/main.CreateUserTokenPayload"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        }
+      }
+    },
+    "/authentication/user": {
+      "post": {
+        "description": "Registers a user",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["authentication"],
+        "summary": "Registers a user",
+        "parameters": [
+          {
+            "description": "User credentials",
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/main.RegisterUserPayload"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User registered",
+            "schema": {
+              "$ref": "#/definitions/main.UserWithToken"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        }
+      }
+    },
+    "/doctors": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "Fetches all doctors",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["doctor"],
+        "summary": "Fetches All doctors",
+        "responses": {
+          "204": {
+            "description": "Doctors Found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/store.Doctor"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Doctor Id  missing",
+            "schema": {}
+          },
+          "404": {
+            "description": "Dctor not found",
+            "schema": {}
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "Creates a new doctor user and doctor profile",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["doctor"],
+        "summary": "Creates a doctor account",
+        "parameters": [
+          {
+            "description": "Doctor user and profile information",
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/main.CreateDoctorPayload"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/store.Doctor"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        }
+      }
+    },
+    "/doctors/availability": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "Creates an availability entry for a doctor",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["doctor"],
+        "summary": "Creates a new availability entry",
+        "parameters": [
+          {
+            "description": "Availability details",
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/main.CreateAvailabilityPayload"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/store.Availability"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        }
+      }
+    },
+    "/doctors/{doctorID}": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "Fetches the doctor by id",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["doctor"],
+        "summary": "Fetches the doctor by id",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Doctor ID",
+            "name": "doctorID",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Doctor Found",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Doctor Id  missing",
+            "schema": {}
+          },
+          "404": {
+            "description": "Dctor not found",
+            "schema": {}
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "description": "Healthcheck endpoint",
+        "produces": ["application/json"],
+        "tags": ["ops"],
+        "summary": "Healthcheck",
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/users/activate/{token}": {
+      "put": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "Activates/Register a user by invitation token",
+        "produces": ["application/json"],
+        "tags": ["users"],
+        "summary": "Activates/Register a user",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Invitation token",
+            "name": "token",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User activated",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        }
+      }
+    },
+    "/users/patients": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "Returns a list of users with role_id = 1 (patients)",
+        "produces": ["application/json"],
+        "tags": ["users"],
+        "summary": "Get all patients",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/store.UserMinimal"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "Fetches a user profile by ID",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["users"],
+        "summary": "Fetches a user profile",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "User ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/store.User"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "main.CreateAppointmentPayload": {
+      "type": "object",
+      "required": ["appointment_time", "doctor_id", "patient_id"],
+      "properties": {
+        "appointment_time": {
+          "type": "string"
+        },
+        "doctor_id": {
+          "type": "string"
+        },
+        "patient_id": {
+          "type": "string"
+        }
+      }
+    },
+    "main.CreateAvailabilityPayload": {
+      "type": "object",
+      "properties": {
+        "available_day": {
+          "type": "string"
+        },
+        "doctor_id": {
+          "type": "string"
+        },
+        "ends_at": {
+          "type": "string"
+        },
+        "starts_from": {
+          "type": "string"
+        }
+      }
+    },
+    "main.CreateDoctorPayload": {
+      "type": "object",
+      "required": [
+        "address",
+        "age",
+        "blood_group",
+        "city",
+        "country",
+        "designation",
+        "email",
+        "firstname",
+        "gender",
+        "lastname",
+        "license_number",
+        "marital_status",
+        "password",
+        "postal_code",
+        "qualification",
+        "specialization",
+        "state",
+        "username"
+      ],
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "age": {
+          "type": "string"
+        },
+        "blood_group": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "designation": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "firstname": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "gender": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "license_number": {
+          "type": "string"
+        },
+        "marital_status": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string",
+          "maxLength": 72,
+          "minLength": 3
+        },
+        "postal_code": {
+          "type": "string"
+        },
+        "qualification": {
+          "type": "string"
+        },
+        "specialization": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string",
+          "maxLength": 100
+        }
+      }
+    },
+    "main.CreateUserTokenPayload": {
+      "type": "object",
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "password": {
+          "type": "string",
+          "maxLength": 72,
+          "minLength": 3
+        }
+      }
+    },
+    "main.RegisterUserPayload": {
+      "type": "object",
+      "required": ["email", "password", "username"],
+      "properties": {
+        "email": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "password": {
+          "type": "string",
+          "maxLength": 72,
+          "minLength": 3
+        },
+        "username": {
+          "type": "string",
+          "maxLength": 100
+        }
+      }
+    },
+    "main.UserWithToken": {
+      "type": "object",
+      "properties": {
+        "created_at": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "is_active": {
+          "type": "boolean"
+        },
+        "role": {
+          "$ref": "#/definitions/store.Role"
+        },
+        "role_id": {
+          "type": "integer"
+        },
+        "token": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "store.Appointment": {
+      "type": "object",
+      "properties": {
+        "appointment_time": {
+          "type": "string"
+        },
+        "doctor_first_name": {
+          "type": "string"
+        },
+        "doctor_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "patient_email": {
+          "type": "string"
+        },
+        "patient_id": {
+          "type": "string"
+        }
+      }
+    },
+    "store.Availability": {
+      "type": "object",
+      "properties": {
+        "available_day": {
+          "type": "string"
+        },
+        "doctor_id": {
+          "type": "string"
+        },
+        "ends_at": {
+          "type": "string"
+        },
+        "starts_from": {
+          "type": "string"
+        }
+      }
+    },
+    "store.Doctor": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "age": {
+          "type": "string"
+        },
+        "availability": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "blood_group": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "designation": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "license_number": {
+          "type": "string"
+        },
+        "marital_status": {
+          "type": "string"
+        },
+        "postal_code": {
+          "type": "string"
+        },
+        "qualification": {
+          "type": "string"
+        },
+        "specialization": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "store.Role": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "level": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "store.User": {
+      "type": "object",
+      "properties": {
+        "created_at": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "is_active": {
+          "type": "boolean"
+        },
+        "role": {
+          "$ref": "#/definitions/store.Role"
+        },
+        "role_id": {
+          "type": "integer"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "store.UserMinimal": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "ApiKeyAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
 }
